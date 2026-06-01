@@ -23,7 +23,7 @@ namespace Final_Project
         Screen screen;
         Texture2D backTexture, blockTexture, circleTexture, lineTexture, ballTexture, introTexture;
         Texture2D tgtr;
-        Rectangle window, blockRect, blockRect1, circleRect, lineRect, ballRect, twoPlayRect, quitRect;
+        Rectangle window, blockRect, blockRect1, blockCRect, blockCRect1, circleRect, lineRect, ballRect, twoPlayRect, quitRect;
         Vector2 ballLocation, blockLocation, blockLocation1;
 
         Vector2 ballSpeed, blockSpeed, blockSpeed1;
@@ -62,6 +62,10 @@ namespace Final_Project
 
             blockRect = new Rectangle(10, 225, 20, 150);
             blockRect1 = new Rectangle(970, 225, 20, 150);
+
+            //blockCRect = new Rectangle(blockRect.X,blockRect.Y,0,150);
+            //blockCRect1 = new Rectangle(blockRect.X, blockRect.Y, 0, 150);
+
             blockLocation = blockRect.Location.ToVector2();
             blockLocation1 = blockRect1.Location.ToVector2();
 
@@ -90,6 +94,8 @@ namespace Final_Project
             keyboardState = Keyboard.GetState();
             prevMouseState = mouseState;
             mouseState = Mouse.GetState();
+            blockSpeed.Y = 0;
+            blockSpeed1.Y = 0;
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -106,12 +112,86 @@ namespace Final_Project
                 }
             }
             int start;
-            start = gen.Next(1);
+            start = gen.Next(0,2);
             int right = 0, left = 1;
 
             
             if (screen == Screen.Gameplay)
             {
+
+                if (start == right && begin)
+                {
+
+                    ballSpeed.X = 4;
+                    begin = false;
+                }
+                else if (start == left && begin)
+                {
+
+                    ballSpeed.X = -4;
+                    begin = false;
+
+                }
+
+                if (keyboardState.IsKeyDown(Keys.Up))
+                {               
+                    blockSpeed1.Y += -5;
+                }
+                
+                if (keyboardState.IsKeyDown(Keys.Down))
+                {
+                    blockSpeed1.Y += 5;
+                }
+               
+               
+                if (keyboardState.IsKeyDown(Keys.W))
+                {
+                    blockSpeed.Y += -5;
+                }
+                
+                if (keyboardState.IsKeyDown(Keys.S))
+                {
+                    blockSpeed.Y += 5;
+                }
+
+                blockLocation.Y += blockSpeed.Y;
+                blockLocation1.Y += blockSpeed1.Y;
+
+
+                // Horizontal Movement
+                ballLocation.X += ballSpeed.X;
+                UpdateRectangle();
+
+                if (ballRect.Intersects(blockRect)|| ballRect.Intersects(blockRect1))
+                {
+                    ballLocation.X -= ballSpeed.X;
+                    UpdateRectangle();
+
+                    ballSpeed.X *= -1;
+                    ballSpeed.Y += (blockSpeed.Y/8);
+                }
+               
+                
+                
+                //ballSpeed.X *= (3/2);
+
+
+                
+
+                
+                ballLocation.Y += ballSpeed.Y;
+                UpdateRectangle();
+
+                if (ballRect.Intersects(blockRect) || ballRect.Intersects(blockRect1))
+                {
+                    ballLocation.Y -= ballSpeed.Y;
+                    UpdateRectangle();
+
+                    ballSpeed.Y *= -1;
+                    //ballSpeed.Y += (blockSpeed.Y / 8);
+                }
+
+
                 if (ballRect.Top <= 0)
                 {
                     ballSpeed.Y *= -1;
@@ -121,68 +201,7 @@ namespace Final_Project
                     ballSpeed.Y *= -1;
                 }
 
-                
-                if (keyboardState.IsKeyDown(Keys.Up))
-                {               
-                    blockSpeed1.Y *= -1;
-                }
-                else if (keyboardState.IsKeyUp(Keys.Up))
-                {
-                    blockSpeed1.Y = 0;
-                }
-                if (keyboardState.IsKeyDown(Keys.Down))
-                {
-                    blockSpeed1.Y *= -1;
-                }
-                if (keyboardState.IsKeyUp(Keys.Down))
-                {
-                    blockSpeed1.Y = 0;
-                }
-                if (keyboardState.IsKeyDown(Keys.W))
-                {
-                    blockSpeed.Y *= -1;
-                }
-                if (keyboardState.IsKeyUp(Keys.W))
-                {
-                    blockSpeed.Y = 0;
-                }
-                if (keyboardState.IsKeyDown(Keys.S))
-                {
-                    blockSpeed.Y *= -1;
-                }
-                if (keyboardState.IsKeyUp(Keys.S))
-                {
-                    blockSpeed.Y = 0;
-                }
 
-                if (ballRect.Intersects(blockRect)|| ballRect.Intersects(blockRect1))
-                {
-                 
-                    ballSpeed.X *= -1;
-                }
-               
-                if (start == right && begin)
-                {
-                    blockSpeed1.Y = 4;
-                    blockSpeed.Y = 4;
-                    ballSpeed.X = 4;
-                    begin = false;
-                }
-                else if (start == left&& begin)
-                {
-                    blockSpeed.Y = 4;
-                    blockSpeed1.Y = 4;
-                    ballSpeed.X = -4;
-                    begin = false;
-                    // ballRect.Y += (int)ballSpeed.Y;
-                }
-                blockLocation.Y += blockSpeed.Y;
-                blockLocation1.Y += blockSpeed1.Y;
-
-                ballLocation.X += ballSpeed.X;
-                ballLocation.Y += ballSpeed.Y;
-                UpdateRectangle();
-                // ballRect.Y += (int)ballSpeed.Y;
             }
             
             base.Update(gameTime);
