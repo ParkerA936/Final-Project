@@ -30,7 +30,7 @@ namespace Final_Project
         Random gen;
         KeyboardState keyboardState;
         MouseState mouseState, prevMouseState;
-        bool begin;
+        bool begin, intersect;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -70,6 +70,7 @@ namespace Final_Project
             blockLocation1 = blockRect1.Location.ToVector2();
 
             begin = true;
+            intersect = true;
             base.Initialize();
             gen = new Random();
 
@@ -81,7 +82,7 @@ namespace Final_Project
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             ballTexture = Content.Load<Texture2D>("Ball (1)");
             backTexture = Content.Load<Texture2D>("Blue vs Red");
-            blockTexture = Content.Load<Texture2D>("White box");
+            blockTexture = Content.Load<Texture2D>("White box (1)");
             circleTexture = Content.Load<Texture2D>("Circle_ (1)");
             lineTexture = Content.Load<Texture2D>("Line (1)");
             introTexture = Content.Load<Texture2D>("PongIntro");
@@ -133,23 +134,23 @@ namespace Final_Project
 
                 }
 
-                if (keyboardState.IsKeyDown(Keys.Up))
+                if (keyboardState.IsKeyDown(Keys.Up) && !intersect)
                 {               
                     blockSpeed1.Y += -5;
                 }
                 
-                if (keyboardState.IsKeyDown(Keys.Down))
+                if (keyboardState.IsKeyDown(Keys.Down) && !intersect)
                 {
                     blockSpeed1.Y += 5;
                 }
                
                
-                if (keyboardState.IsKeyDown(Keys.W))
+                if (keyboardState.IsKeyDown(Keys.W) && !intersect)
                 {
                     blockSpeed.Y += -5;
                 }
                 
-                if (keyboardState.IsKeyDown(Keys.S))
+                if (keyboardState.IsKeyDown(Keys.S) && !intersect)
                 {
                     blockSpeed.Y += 5;
                 }
@@ -157,7 +158,7 @@ namespace Final_Project
                 blockLocation.Y += blockSpeed.Y;
                 blockLocation1.Y += blockSpeed1.Y;
 
-
+                intersect = false;
                 // Horizontal Movement
                 ballLocation.X += ballSpeed.X;
                 UpdateRectangle();
@@ -166,7 +167,7 @@ namespace Final_Project
                 {
                     ballLocation.X -= ballSpeed.X;
                     UpdateRectangle();
-
+                    intersect= true;
                     ballSpeed.X *= -1;
                     ballSpeed.Y += (blockSpeed.Y/8);
                 }
@@ -186,9 +187,10 @@ namespace Final_Project
                 {
                     ballLocation.Y -= ballSpeed.Y;
                     UpdateRectangle();
-
+                    intersect = true;
                     ballSpeed.Y *= -1;
                     //ballSpeed.Y += (blockSpeed.Y / 8);
+                    
                 }
 
 
