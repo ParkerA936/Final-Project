@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Net.Security;
 using System.Threading;
 
 namespace Final_Project
@@ -25,12 +26,13 @@ namespace Final_Project
         Texture2D tgtr;
         Rectangle window, blockRect, blockRect1, blockCRect, blockCRect1, circleRect, lineRect, ballRect, twoPlayRect, quitRect;
         Vector2 ballLocation, blockLocation, blockLocation1;
-
+        SpriteFont font;
         Vector2 ballSpeed, blockSpeed, blockSpeed1;
         Random gen;
         KeyboardState keyboardState;
         MouseState mouseState, prevMouseState;
-        bool begin, intersect;
+        bool begin, intersect, timer;
+        int time;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -68,8 +70,11 @@ namespace Final_Project
 
             blockLocation = blockRect.Location.ToVector2();
             blockLocation1 = blockRect1.Location.ToVector2();
+            
+            time = 0;
 
             begin = true;
+            timer = false;
             intersect = true;
             base.Initialize();
             gen = new Random();
@@ -86,6 +91,7 @@ namespace Final_Project
             circleTexture = Content.Load<Texture2D>("Circle_ (1)");
             lineTexture = Content.Load<Texture2D>("Line (1)");
             introTexture = Content.Load<Texture2D>("PongIntro");
+            font = Content.Load<SpriteFont>("Font");
 
             // TODO: use this.Content to load your game content here
         }
@@ -203,6 +209,25 @@ namespace Final_Project
                     ballSpeed.Y *= -1;
                 }
 
+                if (ballRect.Right >= 1000 || ballRect.Left <= 0)
+                {
+                    ballSpeed.X = 0; ballSpeed.Y = 0;
+                    ballLocation.X = 477; ballLocation.Y = 276;
+                    timer = true;
+                }
+                if (timer)
+                {
+                    time += 1;
+                }
+                if (time == 360)
+                {
+                    time = 0;
+                    timer = false;
+                }
+                if (time == 180)
+                {
+                    begin = true;
+                }
 
             }
             
@@ -230,7 +255,11 @@ namespace Final_Project
                 _spriteBatch.Draw(blockTexture, blockRect1, Color.White);
                 _spriteBatch.Draw(circleTexture, circleRect, Color.White);
                 _spriteBatch.Draw(lineTexture, lineRect, Color.White);
+                _spriteBatch.DrawString(font, "0", new Vector2(340, 60), Color.Black);
+                _spriteBatch.DrawString(font, "0", new Vector2(585, 60), Color.Black);
                 _spriteBatch.Draw(ballTexture, ballRect, Color.White);
+                
+
             }
             _spriteBatch.End();
             base.Draw(gameTime);

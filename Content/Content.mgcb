@@ -49,6 +49,11 @@
 /processorParam:TextureFormat=Color
 /build:Circle_ (1).png
 
+#begin Font.spritefont
+/importer:
+/processor:
+/build:Font.spritefont
+
 #begin Line (1).png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -84,16 +89,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:White box (1).png
-
-#begin White box.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:White box.png
 
