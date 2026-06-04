@@ -33,6 +33,7 @@ namespace Final_Project
         MouseState mouseState, prevMouseState;
         bool begin, intersect, timer;
         int time;
+        int score = 0, score1 = 0;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -118,7 +119,8 @@ namespace Final_Project
                     Exit();
                 }
             }
-            int start;
+            int start,start1;
+            start1 = gen.Next(0, 2);
             start = gen.Next(0,2);
             int right = 0, left = 1;
 
@@ -128,35 +130,56 @@ namespace Final_Project
 
                 if (start == right && begin)
                 {
-
                     ballSpeed.X = 4;
+                    if (start1 == 1)
+                    {
+                        ballSpeed.Y = 4;
+                    }
+                    else if (start1 == 2)
+                    {
+                        ballSpeed.Y = -4;
+                    }
+
+
                     begin = false;
                 }
                 else if (start == left && begin)
                 {
 
                     ballSpeed.X = -4;
+                   
+                    if (start1 == 1)
+                    {
+                        ballSpeed.Y = 4;
+                    }
+                    else if (start1 == 2)
+                    {
+                        ballSpeed.Y = -4;
+                    }
                     begin = false;
-
                 }
 
-                if (keyboardState.IsKeyDown(Keys.Up) && !intersect)
+                if (keyboardState.IsKeyDown(Keys.Up))
                 {               
                     blockSpeed1.Y += -5;
+                    if (blockRect.Top == 0)
+                    {
+                        blockSpeed1.Y = 0;
+                    }
                 }
                 
-                if (keyboardState.IsKeyDown(Keys.Down) && !intersect)
+                if (keyboardState.IsKeyDown(Keys.Down))
                 {
                     blockSpeed1.Y += 5;
                 }
                
                
-                if (keyboardState.IsKeyDown(Keys.W) && !intersect)
+                if (keyboardState.IsKeyDown(Keys.W))
                 {
                     blockSpeed.Y += -5;
                 }
                 
-                if (keyboardState.IsKeyDown(Keys.S) && !intersect)
+                if (keyboardState.IsKeyDown(Keys.S))
                 {
                     blockSpeed.Y += 5;
                 }
@@ -191,9 +214,43 @@ namespace Final_Project
 
                 if (ballRect.Intersects(blockRect) || ballRect.Intersects(blockRect1))
                 {
-                    ballLocation.Y -= ballSpeed.Y;
+                    
+                    // If ball hits paddle 1
+                    if (ballLocation.X < window.Center.X)
+                    {
+                        // Hits Bottom
+                        if (ballRect.Center.Y > blockRect.Center.Y)
+                        {
+                            ballLocation.Y = blockRect.Bottom;
+                            UpdateRectangle();
+                        }
+                        // Hits Top
+                        else
+                        {
+                            ballLocation.Y = blockRect.Top - ballRect.Height;
+                            UpdateRectangle();
+                        }
+                    }
+
+                    // If ball hits paddle 2
+                    else if (ballLocation.X > window.Center.X)
+                    {
+                        if (ballRect.Center.Y > blockRect1.Center.Y)
+                        {
+                            ballLocation.Y = blockRect1.Bottom;
+                            UpdateRectangle();
+                        }
+                        else
+                        {
+                            ballLocation.Y = blockRect1.Top - ballRect.Height;
+                            UpdateRectangle();
+                        }
+                    }
+
+
                     UpdateRectangle();
                     intersect = true;
+                   
                     ballSpeed.Y *= -1;
                     //ballSpeed.Y += (blockSpeed.Y / 8);
                     
@@ -209,26 +266,36 @@ namespace Final_Project
                     ballSpeed.Y *= -1;
                 }
 
-                if (ballRect.Right >= 1000 || ballRect.Left <= 0)
+                if (ballRect.Left >= 1000 )
                 {
                     ballSpeed.X = 0; ballSpeed.Y = 0;
                     ballLocation.X = 477; ballLocation.Y = 276;
                     timer = true;
+                    score += 1;
+                    
+                }
+                else if (ballRect.Right <= 0)
+                {
+                    ballSpeed.X = 0; ballSpeed.Y = 0;
+                    ballLocation.X = 477; ballLocation.Y = 276;
+                    timer = true;
+                    score1 += 1;
+
                 }
                 if (timer)
                 {
                     time += 1;
                 }
-                if (time == 360)
-                {
-                    time = 0;
-                    timer = false;
-                }
+              
                 if (time == 180)
                 {
                     begin = true;
                 }
-
+                 if (time == 360)
+                {
+                    time = 0;
+                    timer = false;
+                }
             }
             
             base.Update(gameTime);
@@ -255,11 +322,10 @@ namespace Final_Project
                 _spriteBatch.Draw(blockTexture, blockRect1, Color.White);
                 _spriteBatch.Draw(circleTexture, circleRect, Color.White);
                 _spriteBatch.Draw(lineTexture, lineRect, Color.White);
-                _spriteBatch.DrawString(font, "0", new Vector2(340, 60), Color.Black);
-                _spriteBatch.DrawString(font, "0", new Vector2(585, 60), Color.Black);
+                _spriteBatch.DrawString(font, ""+ score, new Vector2(340, 60), Color.Black);
+                _spriteBatch.DrawString(font, ""+score1, new Vector2(585, 60), Color.Black);
                 _spriteBatch.Draw(ballTexture, ballRect, Color.White);
                 
-
             }
             _spriteBatch.End();
             base.Draw(gameTime);
