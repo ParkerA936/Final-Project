@@ -31,7 +31,7 @@ namespace Final_Project
         Random gen;
         KeyboardState keyboardState;
         MouseState mouseState, prevMouseState;
-        bool begin, intersect, timer;
+        bool begin, intersect, intersect1, timer;
         int time;
         int score = 0, score1 = 0;
         public Game1()
@@ -73,7 +73,7 @@ namespace Final_Project
             blockLocation1 = blockRect1.Location.ToVector2();
             
             time = 0;
-
+            intersect1 = true;
             begin = true;
             timer = false;
             intersect = true;
@@ -119,23 +119,27 @@ namespace Final_Project
                     Exit();
                 }
             }
-            int start,start1;
-            start1 = gen.Next(0, 2);
-            start = gen.Next(0,2);
-            int right = 0, left = 1;
+            
 
             
             if (screen == Screen.Gameplay)
             {
+                int start, start1;
+                start1 = gen.Next(0, 2);
+                start = gen.Next(0, 2);
+                int right = 0, left = 1;
 
                 if (start == right && begin)
                 {
+                    intersect1 = true;
+                    intersect = true;
                     ballSpeed.X = 4;
+
                     if (start1 == 1)
                     {
                         ballSpeed.Y = 4;
                     }
-                    else if (start1 == 2)
+                    if (start1 == 0)
                     {
                         ballSpeed.Y = -4;
                     }
@@ -143,8 +147,10 @@ namespace Final_Project
 
                     begin = false;
                 }
-                else if (start == left && begin)
+                if (start == left && begin)
                 {
+                    intersect1 = true;
+                    intersect = true;
 
                     ballSpeed.X = -4;
                    
@@ -152,7 +158,7 @@ namespace Final_Project
                     {
                         ballSpeed.Y = 4;
                     }
-                    else if (start1 == 2)
+                    if (start1 == 0)
                     {
                         ballSpeed.Y = -4;
                     }
@@ -187,28 +193,45 @@ namespace Final_Project
                 blockLocation.Y += blockSpeed.Y;
                 blockLocation1.Y += blockSpeed1.Y;
 
-                intersect = false;
+                
                 // Horizontal Movement
                 ballLocation.X += ballSpeed.X;
                 UpdateRectangle();
 
-                if (ballRect.Intersects(blockRect)|| ballRect.Intersects(blockRect1))
+                //if (ballRect.Intersects(blockRect)|| ballRect.Intersects(blockRect1))
+                //{
+                //    ballLocation.X -= ballSpeed.X;
+                //    UpdateRectangle();
+                //    intersect= true;
+                //    ballSpeed.X *= -1;
+                //    ballSpeed.Y += (blockSpeed.Y/8);
+                //}
+                if (ballRect.Intersects(blockRect) && intersect)
                 {
                     ballLocation.X -= ballSpeed.X;
                     UpdateRectangle();
-                    intersect= true;
+                    intersect = false;
+                    intersect1 = true;
                     ballSpeed.X *= -1;
-                    ballSpeed.Y += (blockSpeed.Y/8);
+                    ballSpeed.Y += (blockSpeed.Y / 8);
                 }
-               
-                
-                
+                else if (ballRect.Intersects(blockRect1) && intersect1)
+                {
+                    ballLocation.X -= ballSpeed.X;
+                    UpdateRectangle();
+                    intersect = true;
+                    intersect1 = false;
+                    ballSpeed.X *= -1;
+                    ballSpeed.Y += (blockSpeed.Y / 8);
+                }
+
+
                 //ballSpeed.X *= (3/2);
 
 
-                
 
-                
+
+
                 ballLocation.Y += ballSpeed.Y;
                 UpdateRectangle();
 
@@ -255,7 +278,22 @@ namespace Final_Project
                     //ballSpeed.Y += (blockSpeed.Y / 8);
                     
                 }
-
+                if (blockRect.Top <= 0)
+                {
+                    blockLocation.Y = 0;
+                }
+                if (blockRect.Bottom >= 600)
+                {
+                    blockLocation.Y = 450;
+                }
+                 if (blockRect1.Top <= 0)
+                    {
+                        blockLocation1.Y = 0;
+                    }
+                if (blockRect1.Bottom >= 600)
+                {
+                    blockLocation1.Y = 450;
+                }
 
                 if (ballRect.Top <= 0)
                 {
@@ -289,13 +327,11 @@ namespace Final_Project
               
                 if (time == 180)
                 {
-                    begin = true;
-                }
-                 if (time == 360)
-                {
-                    time = 0;
+                    begin = true; 
                     timer = false;
+                    time = 0;
                 }
+               
             }
             
             base.Update(gameTime);
