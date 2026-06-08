@@ -23,17 +23,17 @@ namespace Final_Project
 
         Screen screen;
         Texture2D backTexture, blockTexture, circleTexture, lineTexture, ballTexture, introTexture;
-        Texture2D tgtr;
-        Rectangle window, blockRect, blockRect1, blockCRect, blockCRect1, circleRect, lineRect, ballRect, twoPlayRect, quitRect;
+        Texture2D  pauseTexture, oneTexture, twoTexture, threeTexture, menuTexture;
+        Rectangle window, blockRect, blockRect1, circleRect, lineRect, ballRect, twoPlayRect, quitRect;
         Vector2 ballLocation, blockLocation, blockLocation1;
-        SpriteFont font;
+        SpriteFont font, menuFont;
         Vector2 ballSpeed, blockSpeed, blockSpeed1;
         Random gen;
-        KeyboardState keyboardState;
+        KeyboardState keyboardState, prevKeyState;
         MouseState mouseState, prevMouseState;
-        bool begin, intersect, intersect1, timer;
+        bool begin, intersect, intersect1, timer, stopwatch1;
         int time;
-        int score = 0, score1 = 0;
+        int score = 0, score1 = 0, stopwatch = 0;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -77,6 +77,7 @@ namespace Final_Project
             begin = true;
             timer = false;
             intersect = true;
+            stopwatch1 = false;
             base.Initialize();
             gen = new Random();
 
@@ -92,6 +93,13 @@ namespace Final_Project
             circleTexture = Content.Load<Texture2D>("Circle_ (1)");
             lineTexture = Content.Load<Texture2D>("Line (1)");
             introTexture = Content.Load<Texture2D>("PongIntro");
+            pauseTexture = Content.Load<Texture2D>("pause1");
+            oneTexture = Content.Load<Texture2D>("one1");
+            twoTexture = Content.Load<Texture2D>("two1"); 
+            threeTexture = Content.Load<Texture2D>("three1");
+            menuTexture = Content.Load<Texture2D>("menu1");
+
+            menuFont = Content.Load<SpriteFont>("menuFont");
             font = Content.Load<SpriteFont>("Font");
 
             // TODO: use this.Content to load your game content here
@@ -99,6 +107,7 @@ namespace Final_Project
 
         protected override void Update(GameTime gameTime)
         {
+            prevKeyState = keyboardState;
             keyboardState = Keyboard.GetState();
             prevMouseState = mouseState;
             mouseState = Mouse.GetState();
@@ -119,11 +128,43 @@ namespace Final_Project
                     Exit();
                 }
             }
-            
-
-            
-            if (screen == Screen.Gameplay)
+            else if (screen == Screen.Menu)
             {
+
+            }
+
+            else if (screen == Screen.Pause)
+
+            {
+                if (keyboardState.IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space))
+                {
+                    stopwatch1 = true;
+                }
+                if (stopwatch1)
+                {
+                    stopwatch += 1;
+
+                }
+
+                if (stopwatch >= 240)
+                {
+                    screen = Screen.Gameplay;
+                    stopwatch = 0;
+                    stopwatch1 = false;
+                }
+                if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M))
+                {
+                    screen = Screen.Menu;
+                }
+            }
+            else if (screen == Screen.Gameplay)
+            {
+                if (keyboardState.IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space))
+                {
+                    screen = Screen.Pause;
+
+
+                }
                 int start, start1;
                 start1 = gen.Next(0, 2);
                 start = gen.Next(0, 2);
@@ -153,7 +194,7 @@ namespace Final_Project
                     intersect = true;
 
                     ballSpeed.X = -4;
-                   
+
                     if (start1 == 1)
                     {
                         ballSpeed.Y = 4;
@@ -166,25 +207,25 @@ namespace Final_Project
                 }
 
                 if (keyboardState.IsKeyDown(Keys.Up))
-                {               
+                {
                     blockSpeed1.Y += -5;
                     if (blockRect.Top == 0)
                     {
                         blockSpeed1.Y = 0;
                     }
                 }
-                
+
                 if (keyboardState.IsKeyDown(Keys.Down))
                 {
                     blockSpeed1.Y += 5;
                 }
-               
-               
+
+
                 if (keyboardState.IsKeyDown(Keys.W))
                 {
                     blockSpeed.Y += -5;
                 }
-                
+
                 if (keyboardState.IsKeyDown(Keys.S))
                 {
                     blockSpeed.Y += 5;
@@ -193,7 +234,7 @@ namespace Final_Project
                 blockLocation.Y += blockSpeed.Y;
                 blockLocation1.Y += blockSpeed1.Y;
 
-                
+
                 // Horizontal Movement
                 ballLocation.X += ballSpeed.X;
                 UpdateRectangle();
@@ -211,6 +252,10 @@ namespace Final_Project
                     ballLocation.X -= ballSpeed.X;
                     UpdateRectangle();
                     intersect = false;
+
+
+
+
                     intersect1 = true;
                     ballSpeed.X *= -1;
                     ballSpeed.Y += (blockSpeed.Y / 8);
@@ -237,7 +282,7 @@ namespace Final_Project
 
                 if (ballRect.Intersects(blockRect) || ballRect.Intersects(blockRect1))
                 {
-                    
+
                     // If ball hits paddle 1
                     if (ballLocation.X < window.Center.X)
                     {
@@ -273,10 +318,10 @@ namespace Final_Project
 
                     UpdateRectangle();
                     intersect = true;
-                   
+
                     ballSpeed.Y *= -1;
                     //ballSpeed.Y += (blockSpeed.Y / 8);
-                    
+
                 }
                 if (blockRect.Top <= 0)
                 {
@@ -286,10 +331,10 @@ namespace Final_Project
                 {
                     blockLocation.Y = 450;
                 }
-                 if (blockRect1.Top <= 0)
-                    {
-                        blockLocation1.Y = 0;
-                    }
+                if (blockRect1.Top <= 0)
+                {
+                    blockLocation1.Y = 0;
+                }
                 if (blockRect1.Bottom >= 600)
                 {
                     blockLocation1.Y = 450;
@@ -304,13 +349,13 @@ namespace Final_Project
                     ballSpeed.Y *= -1;
                 }
 
-                if (ballRect.Left >= 1000 )
+                if (ballRect.Left >= 1000)
                 {
                     ballSpeed.X = 0; ballSpeed.Y = 0;
                     ballLocation.X = 477; ballLocation.Y = 276;
                     timer = true;
                     score += 1;
-                    
+
                 }
                 else if (ballRect.Right <= 0)
                 {
@@ -324,24 +369,24 @@ namespace Final_Project
                 {
                     time += 1;
                 }
-              
+
                 if (time == 180)
                 {
-                    begin = true; 
+                    begin = true;
                     timer = false;
                     time = 0;
                 }
-               
+
             }
             
             base.Update(gameTime);
         }
 
 
-                // TODO: Add your update logic here
+        // TODO: Add your update logic here
 
-              
-     
+
+
 
         protected override void Draw(GameTime gameTime)
         {
@@ -351,17 +396,44 @@ namespace Final_Project
             {
                 _spriteBatch.Draw(introTexture, window, Color.White);
             }
-                if (screen == Screen.Gameplay)
+            else if (screen == Screen.Menu)
+            {
+                _spriteBatch.Draw(menuTexture, window, Color.White);
+                _spriteBatch.DrawString(menuFont, "Menu", new Vector2(463, 80), Color.White);
+            }
+            
+
+            else if (screen == Screen.Pause)
+            {
+                if (stopwatch <= 60)
+                {
+                    _spriteBatch.Draw(pauseTexture, window, Color.White);
+
+                }
+                else if (stopwatch <= 120)
+                {
+                    _spriteBatch.Draw(threeTexture, window, Color.White);
+                }
+                else if (stopwatch <= 180)
+                {
+                    _spriteBatch.Draw(twoTexture, window, Color.White);
+                }
+                else if (stopwatch <= 240)
+                {
+                    _spriteBatch.Draw(oneTexture, window, Color.White);
+                }
+            }
+            else if (screen == Screen.Gameplay)
             {
                 _spriteBatch.Draw(backTexture, window, Color.White);
                 _spriteBatch.Draw(blockTexture, blockRect, Color.White);
                 _spriteBatch.Draw(blockTexture, blockRect1, Color.White);
                 _spriteBatch.Draw(circleTexture, circleRect, Color.White);
                 _spriteBatch.Draw(lineTexture, lineRect, Color.White);
-                _spriteBatch.DrawString(font, ""+ score, new Vector2(340, 60), Color.Black);
-                _spriteBatch.DrawString(font, ""+score1, new Vector2(585, 60), Color.Black);
+                _spriteBatch.DrawString(font, "" + score, new Vector2(340, 60), Color.Black);
+                _spriteBatch.DrawString(font, "" + score1, new Vector2(585, 60), Color.Black);
                 _spriteBatch.Draw(ballTexture, ballRect, Color.White);
-                
+
             }
             _spriteBatch.End();
             base.Draw(gameTime);
