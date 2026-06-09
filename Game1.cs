@@ -23,8 +23,9 @@ namespace Final_Project
 
         Screen screen;
         Texture2D backTexture, blockTexture, circleTexture, lineTexture, ballTexture, introTexture;
-        Texture2D  pauseTexture, oneTexture, twoTexture, threeTexture, menuTexture;
+        Texture2D  pauseTexture, oneTexture, twoTexture, threeTexture, menuTexture, rulesTexture;
         Rectangle window, blockRect, blockRect1, circleRect, lineRect, ballRect, twoPlayRect, quitRect;
+        Rectangle rulesRect;
         Vector2 ballLocation, blockLocation, blockLocation1;
         SpriteFont font, menuFont;
         Vector2 ballSpeed, blockSpeed, blockSpeed1;
@@ -66,6 +67,7 @@ namespace Final_Project
             blockRect = new Rectangle(10, 225, 20, 150);
             blockRect1 = new Rectangle(970, 225, 20, 150);
 
+            rulesRect = new Rectangle(399,495,200,50);
             //blockCRect = new Rectangle(blockRect.X,blockRect.Y,0,150);
             //blockCRect1 = new Rectangle(blockRect.X, blockRect.Y, 0, 150);
 
@@ -98,6 +100,7 @@ namespace Final_Project
             twoTexture = Content.Load<Texture2D>("two1"); 
             threeTexture = Content.Load<Texture2D>("three1");
             menuTexture = Content.Load<Texture2D>("menu1");
+            rulesTexture = Content.Load<Texture2D>("Rules");
 
             menuFont = Content.Load<SpriteFont>("menuFont");
             font = Content.Load<SpriteFont>("Font");
@@ -122,15 +125,33 @@ namespace Final_Project
                 if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released && twoPlayRect.Contains(mouseState.Position))
                 {
                     screen = Screen.Gameplay;
+                    
                 }
-                if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released && quitRect.Contains(mouseState.Position))
+                else if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released && rulesRect.Contains(mouseState.Position))
+                {
+                    screen = Screen.Menu;
+
+                }
+                else if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released && quitRect.Contains(mouseState.Position))
                 {
                     Exit();
                 }
+                if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M))
+                {
+                    screen = Screen.Menu;
+                }
+               
             }
             else if (screen == Screen.Menu)
             {
-
+                if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M))
+                {
+                    screen = Screen.Intro;
+                }
+                if (keyboardState.IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space))
+                {
+                    screen = Screen.Pause;
+                }
             }
 
             else if (screen == Screen.Pause)
@@ -152,7 +173,7 @@ namespace Final_Project
                     stopwatch = 0;
                     stopwatch1 = false;
                 }
-                if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M))
+                if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M) && !stopwatch1)
                 {
                     screen = Screen.Menu;
                 }
@@ -239,13 +260,13 @@ namespace Final_Project
                 ballLocation.X += ballSpeed.X;
                 UpdateRectangle();
 
-                //if (ballRect.Intersects(blockRect)|| ballRect.Intersects(blockRect1))
+                //if (ballRect.Intersects(blockRect) || ballRect.Intersects(blockRect1))
                 //{
                 //    ballLocation.X -= ballSpeed.X;
                 //    UpdateRectangle();
-                //    intersect= true;
+                //    intersect = true;
                 //    ballSpeed.X *= -1;
-                //    ballSpeed.Y += (blockSpeed.Y/8);
+                //    ballSpeed.Y += (blockSpeed.Y / 8);
                 //}
                 if (ballRect.Intersects(blockRect) && intersect)
                 {
@@ -395,11 +416,13 @@ namespace Final_Project
             if (screen == Screen.Intro)
             {
                 _spriteBatch.Draw(introTexture, window, Color.White);
+                _spriteBatch.Draw(rulesTexture, rulesRect, Color.White);
             }
             else if (screen == Screen.Menu)
             {
                 _spriteBatch.Draw(menuTexture, window, Color.White);
-                _spriteBatch.DrawString(menuFont, "Menu", new Vector2(463, 80), Color.White);
+                _spriteBatch.DrawString(menuFont, "Rules", new Vector2(463, 80), Color.White);
+                _spriteBatch.DrawString(menuFont, "", new Vector2(463, 80), Color.White);
             }
             
 
