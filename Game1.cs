@@ -12,6 +12,8 @@ namespace Final_Project
         //Defined the screens
         Intro,
         Menu,
+        Rules,
+        Oneplay,
         Gameplay,
         Pause,
         End
@@ -24,8 +26,9 @@ namespace Final_Project
         Screen screen;
         Texture2D backTexture, blockTexture, circleTexture, lineTexture, ballTexture, introTexture;
         Texture2D  pauseTexture, oneTexture, twoTexture, threeTexture, menuTexture, rulesTexture;
+        Texture2D speedUpTexture,speedDownTexture;
         Rectangle window, blockRect, blockRect1, circleRect, lineRect, ballRect, twoPlayRect, quitRect;
-        Rectangle rulesRect;
+        Rectangle rulesRect, speedUpRect, speedDownRect;
         Vector2 ballLocation, blockLocation, blockLocation1;
         SpriteFont font, menuFont;
         Vector2 ballSpeed, blockSpeed, blockSpeed1;
@@ -50,6 +53,9 @@ namespace Final_Project
             _graphics.PreferredBackBufferWidth = window.Width;
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
+
+            speedDownRect = new Rectangle(0,0,100,100);
+            speedUpRect = new Rectangle(0,0, 100,100);
 
             ballSpeed = new Vector2(0, 2);
             blockSpeed = new Vector2(0, 0);
@@ -101,6 +107,7 @@ namespace Final_Project
             threeTexture = Content.Load<Texture2D>("three1");
             menuTexture = Content.Load<Texture2D>("menu1");
             rulesTexture = Content.Load<Texture2D>("Rules");
+            speedUpTexture = Content.Load<Texture2D>("SpeedUp");
 
             menuFont = Content.Load<SpriteFont>("menuFont");
             font = Content.Load<SpriteFont>("Font");
@@ -129,7 +136,7 @@ namespace Final_Project
                 }
                 else if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released && rulesRect.Contains(mouseState.Position))
                 {
-                    screen = Screen.Menu;
+                    screen = Screen.Rules;
 
                 }
                 else if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released && quitRect.Contains(mouseState.Position))
@@ -138,15 +145,23 @@ namespace Final_Project
                 }
                 if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M))
                 {
-                    screen = Screen.Menu;
+                    screen = Screen.Rules;
                 }
                
+            }
+            else if (screen == Screen.Rules)
+            {
+                if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M))
+                {
+                    screen = Screen.Intro;
+                }
+                
             }
             else if (screen == Screen.Menu)
             {
                 if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M))
                 {
-                    screen = Screen.Intro;
+                    screen = Screen.Pause;
                 }
                 if (keyboardState.IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space))
                 {
@@ -178,6 +193,10 @@ namespace Final_Project
                     screen = Screen.Menu;
                 }
             }
+
+
+
+
             else if (screen == Screen.Gameplay)
             {
                 if (keyboardState.IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space))
@@ -194,7 +213,7 @@ namespace Final_Project
                 if (start == right && begin)
                 {
                     intersect1 = true;
-                    intersect = true;
+                    intersect = false;
                     ballSpeed.X = 4;
 
                     if (start1 == 1)
@@ -211,7 +230,7 @@ namespace Final_Project
                 }
                 if (start == left && begin)
                 {
-                    intersect1 = true;
+                    intersect1 = false;
                     intersect = true;
 
                     ballSpeed.X = -4;
@@ -293,7 +312,27 @@ namespace Final_Project
 
 
                 //ballSpeed.X *= (3/2);
+                if (ballRect.Intersects(blockRect) || ballRect.Intersects(blockRect1))
+                {
+                    if (ballRect.Left > blockRect.Right)
+                    {
+                        if (ballRect.Intersects(blockRect))
+                        {
+                            ballSpeed.X = -4;
+                            //ballSpeed.X -= ballRect.Center.X;
+                        }
+                    }
+                    if (ballRect.Right > blockRect1.Left)
+                    {
+                        if (ballRect.Intersects(blockRect1))
+                        {
+                            ballSpeed.X = 4;
+                            //ballSpeed.X -= ballRect.Center.X;
+                        }
+                    }
 
+
+                }
 
 
 
@@ -307,6 +346,8 @@ namespace Final_Project
                     // If ball hits paddle 1
                     if (ballLocation.X < window.Center.X)
                     {
+                        intersect = false;
+
                         // Hits Bottom
                         if (ballRect.Center.Y > blockRect.Center.Y)
                         {
@@ -324,6 +365,7 @@ namespace Final_Project
                     // If ball hits paddle 2
                     else if (ballLocation.X > window.Center.X)
                     {
+                        intersect1 = false;
                         if (ballRect.Center.Y > blockRect1.Center.Y)
                         {
                             ballLocation.Y = blockRect1.Bottom;
@@ -337,8 +379,8 @@ namespace Final_Project
                     }
 
 
-                    UpdateRectangle();
-                    intersect = true;
+                    //UpdateRectangle();
+                    //intersect = true;
 
                     ballSpeed.Y *= -1;
                     //ballSpeed.Y += (blockSpeed.Y / 8);
@@ -422,9 +464,14 @@ namespace Final_Project
             {
                 _spriteBatch.Draw(menuTexture, window, Color.White);
                 _spriteBatch.DrawString(menuFont, "Rules", new Vector2(463, 80), Color.White);
-                _spriteBatch.DrawString(menuFont, "", new Vector2(463, 80), Color.White);
+                _spriteBatch.DrawString(menuFont, "Pong is a two-player game where each player controls \na paddle. The left player uses the W key to move up \nand the S key to move down. The right player uses the \nUp Arrow key to move up and the Down Arrow key \nto move down. Players try to hit the ball back and forth \nacross the screen. If a player misses the ball and it goes \npast their paddle, the other player scores a point. The \ngame continues until a player reaches the winning score.", new Vector2(100, 160), Color.White);
             }
-            
+            else if (screen == Screen.Rules)
+            {
+                _spriteBatch.Draw(menuTexture, window, Color.White);
+                _spriteBatch.DrawString(menuFont, "Rules", new Vector2(463, 80), Color.White);
+                _spriteBatch.DrawString(menuFont, "Pong is a two-player game where each player controls \na paddle. The left player uses the W key to move up \nand the S key to move down. The right player uses the \nUp Arrow key to move up and the Down Arrow key \nto move down. Players try to hit the ball back and forth \nacross the screen. If a player misses the ball and it goes \npast their paddle, the other player scores a point. The \ngame continues until a player reaches the winning score.", new Vector2(100, 160), Color.White);
+            }
 
             else if (screen == Screen.Pause)
             {
@@ -453,9 +500,14 @@ namespace Final_Project
                 _spriteBatch.Draw(blockTexture, blockRect1, Color.White);
                 _spriteBatch.Draw(circleTexture, circleRect, Color.White);
                 _spriteBatch.Draw(lineTexture, lineRect, Color.White);
+
+                _spriteBatch.Draw(speedUpTexture, speedUpRect, Color.White);
+
+
                 _spriteBatch.DrawString(font, "" + score, new Vector2(340, 60), Color.Black);
                 _spriteBatch.DrawString(font, "" + score1, new Vector2(585, 60), Color.Black);
                 _spriteBatch.Draw(ballTexture, ballRect, Color.White);
+
 
             }
             _spriteBatch.End();

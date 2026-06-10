@@ -159,6 +159,18 @@
 /processorParam:TextureFormat=Color
 /build:Rules.png
 
+#begin SpeedUp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SpeedUp.png
+
 #begin Three.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
