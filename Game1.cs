@@ -26,9 +26,9 @@ namespace Final_Project
         Screen screen;
         Texture2D backTexture, blockTexture, circleTexture, lineTexture, ballTexture, introTexture;
         Texture2D  pauseTexture, oneTexture, twoTexture, threeTexture, menuTexture, rulesTexture;
-        Texture2D speedUpTexture,speedDownTexture;
+        Texture2D speedUpTexture,speedDownTexture, paddleUpTexure, paddleDownTexture, powerUpTexture;
         Rectangle window, blockRect, blockRect1, circleRect, lineRect, ballRect, twoPlayRect, quitRect;
-        Rectangle rulesRect, speedUpRect, speedDownRect;
+        Rectangle rulesRect, speedUpRect, speedDownRect, powerUpRect;
         Vector2 ballLocation, blockLocation, blockLocation1;
         SpriteFont font, menuFont;
         Vector2 ballSpeed, blockSpeed, blockSpeed1;
@@ -36,7 +36,7 @@ namespace Final_Project
         KeyboardState keyboardState, prevKeyState;
         MouseState mouseState, prevMouseState;
         bool begin, intersect, intersect1, timer, stopwatch1;
-        int time;
+        int time, clock = 0;
         int score = 0, score1 = 0, stopwatch = 0;
         public Game1()
         {
@@ -56,6 +56,7 @@ namespace Final_Project
 
             speedDownRect = new Rectangle(0,0,100,100);
             speedUpRect = new Rectangle(0,0, 100,100);
+            powerUpRect = new Rectangle(0, 0, 100, 100);
 
             ballSpeed = new Vector2(0, 2);
             blockSpeed = new Vector2(0, 0);
@@ -108,6 +109,7 @@ namespace Final_Project
             menuTexture = Content.Load<Texture2D>("menu1");
             rulesTexture = Content.Load<Texture2D>("Rules");
             speedUpTexture = Content.Load<Texture2D>("SpeedUp");
+            powerUpTexture = Content.Load<Texture2D>("MarioPower");
 
             menuFont = Content.Load<SpriteFont>("menuFont");
             font = Content.Load<SpriteFont>("Font");
@@ -199,6 +201,81 @@ namespace Final_Project
 
             else if (screen == Screen.Gameplay)
             {
+                clock += 1;
+                //PowerUps
+                if (clock == 1 || clock == 2000 || clock == 4000 || clock == 6000|| clock == 8000 || clock == 10000 || clock == 12000|| clock == 14000|| clock ==16000||clock == 18000 )
+                {
+                    int powerUps, powerUpLocation;
+                    powerUps = gen.Next(1, 5); //chose what powerUp
+                    int speedUp = 1, speedDown = 2, paddleUp,paddleDown;
+                    powerUpLocation = gen.Next(1, 9);//chose location
+                    if (powerUps == speedUp)
+                    {
+                        ballSpeed.X = 6;//Needs to be temporary
+                    }
+                    if (powerUps == speedDown)
+                    {
+                        ballSpeed.X = 2;//Needs to be temporary
+                    }
+                    if (powerUpLocation == 1)
+                    {
+                        powerUpRect.X = 100;
+                        powerUpRect.Y = 25;
+
+                    }
+                    else if (powerUpLocation == 2)
+                    {
+                        powerUpRect.X = 171;
+                        powerUpRect.Y = 289;
+
+                    }
+                    else if (powerUpLocation == 3)
+                    {
+                        powerUpRect.X = 365;
+                        powerUpRect.Y = 421;
+
+                    }
+                    else if (powerUpLocation == 4)
+                    {
+                        powerUpRect.X = 121;
+                        powerUpRect.Y = 479;
+
+                    }
+                    else if (powerUpLocation == 5)
+                    {
+                        powerUpRect.X = 705;
+                        powerUpRect.Y = 89;
+
+                    }
+                    else if (powerUpLocation == 6)
+                    {
+                        powerUpRect.X = 833;
+                        powerUpRect.Y = 477;
+
+                    }
+                    else if(powerUpLocation == 7)
+                    {
+                        powerUpRect.X = 591;
+                        powerUpRect.Y = 432;
+
+                    }
+                    else if (powerUpLocation == 8)
+                    {
+                        powerUpRect.X = 728;
+                        powerUpRect.Y = 225;
+
+                    }
+
+                    if (powerUps == speedUp)
+                    {
+                        
+                    }
+                    else if (powerUps == speedDown)
+                    {
+
+                    }
+
+                }
                 if (keyboardState.IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space))
                 {
                     screen = Screen.Pause;
@@ -471,6 +548,7 @@ namespace Final_Project
                 _spriteBatch.Draw(menuTexture, window, Color.White);
                 _spriteBatch.DrawString(menuFont, "Rules", new Vector2(463, 80), Color.White);
                 _spriteBatch.DrawString(menuFont, "Pong is a two-player game where each player controls \na paddle. The left player uses the W key to move up \nand the S key to move down. The right player uses the \nUp Arrow key to move up and the Down Arrow key \nto move down. Players try to hit the ball back and forth \nacross the screen. If a player misses the ball and it goes \npast their paddle, the other player scores a point. The \ngame continues until a player reaches the winning score.", new Vector2(100, 160), Color.White);
+                _spriteBatch.DrawString(menuFont, "Space is Pause     M is Rules ", new Vector2(275, 500), Color.White);
             }
 
             else if (screen == Screen.Pause)
@@ -501,7 +579,7 @@ namespace Final_Project
                 _spriteBatch.Draw(circleTexture, circleRect, Color.White);
                 _spriteBatch.Draw(lineTexture, lineRect, Color.White);
 
-                _spriteBatch.Draw(speedUpTexture, speedUpRect, Color.White);
+                _spriteBatch.Draw(powerUpTexture, powerUpRect, Color.White);
 
 
                 _spriteBatch.DrawString(font, "" + score, new Vector2(340, 60), Color.Black);

@@ -68,6 +68,18 @@
 /processorParam:TextureFormat=Color
 /build:Line (1).png
 
+#begin MarioPower.webp
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MarioPower.webp
+
 #begin menu1.png
 /importer:TextureImporter
 /processor:TextureProcessor
