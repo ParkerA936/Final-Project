@@ -25,6 +25,12 @@
 /processorParam:TextureFormat=Color
 /build:Ball (1).png
 
+#begin Ball Bounce.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Ball Bounce.mp3
+
 #begin Blue vs Red.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

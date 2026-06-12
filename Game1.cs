@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -38,6 +39,11 @@ namespace Final_Project
         bool begin, intersect, intersect1, timer, stopwatch1;
         int time, clock = 0;
         int score = 0, score1 = 0, stopwatch = 0;
+        int powerUps=0, powerUpLocation;
+        int speedUp = 1, speedDown = 2, paddleUp = 3, paddleDown = 4;
+        SoundEffect ballSound;
+        SoundEffectInstance instanceballSound;
+        
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -54,9 +60,9 @@ namespace Final_Project
             _graphics.PreferredBackBufferHeight = window.Height;
             _graphics.ApplyChanges();
 
-            speedDownRect = new Rectangle(0,0,100,100);
-            speedUpRect = new Rectangle(0,0, 100,100);
-            powerUpRect = new Rectangle(0, 0, 100, 100);
+            //speedDownRect = new Rectangle(0,0,100,100);
+            //speedUpRect = new Rectangle(0,0, 100,100);
+            powerUpRect = new Rectangle(-100, -100, 100, 100);
 
             ballSpeed = new Vector2(0, 2);
             blockSpeed = new Vector2(0, 0);
@@ -113,7 +119,8 @@ namespace Final_Project
 
             menuFont = Content.Load<SpriteFont>("menuFont");
             font = Content.Load<SpriteFont>("Font");
-
+            ballSound = Content.Load<SoundEffect>("Ball Bounce");
+            instanceballSound = ballSound.CreateInstance();
             // TODO: use this.Content to load your game content here
         }
 
@@ -203,20 +210,29 @@ namespace Final_Project
             {
                 clock += 1;
                 //PowerUps
-                if (clock == 1 || clock == 2000 || clock == 4000 || clock == 6000|| clock == 8000 || clock == 10000 || clock == 12000|| clock == 14000|| clock ==16000||clock == 18000 )
+                
+                if (clock == 600)
                 {
-                    int powerUps, powerUpLocation;
-                    powerUps = gen.Next(1, 5); //chose what powerUp
-                    int speedUp = 1, speedDown = 2, paddleUp,paddleDown;
+                    //int powerUps, powerUpLocation;
+                    powerUps = gen.Next(1, 3); //chose what powerUp
+                    //int speedUp = 1, speedDown = 2, paddleUp = 3,paddleDown = 4;
                     powerUpLocation = gen.Next(1, 9);//chose location
-                    if (powerUps == speedUp)
-                    {
-                        ballSpeed.X = 6;//Needs to be temporary
-                    }
-                    if (powerUps == speedDown)
-                    {
-                        ballSpeed.X = 2;//Needs to be temporary
-                    }
+                    //if (powerUps == speedUp)
+                    //{
+                    //    ballSpeed.X = 6;//Needs to be temporary
+                    //}
+                    //else if (powerUps == speedDown)
+                    //{
+                    //    ballSpeed.X = 2;//Needs to be temporary
+                    //}
+                    //else if (powerUps == paddleUp)
+                    //{
+                    //    //Needs to be temporary
+                    //}
+                    //else if (powerUps == paddleDown)
+                    //{
+                    //    //Needs to be temporary
+                    //}
                     if (powerUpLocation == 1)
                     {
                         powerUpRect.X = 100;
@@ -266,15 +282,56 @@ namespace Final_Project
 
                     }
 
+
+
+                }
+                if (ballRect.Intersects(powerUpRect))
+                {
                     if (powerUps == speedUp)
                     {
-                        
+                        ballSpeed.X *= 1.5f;//Needs to be temporary
+                        ballSpeed.Y *= 1.5f;
                     }
                     else if (powerUps == speedDown)
                     {
-
+                        ballSpeed.X /= 2f;//Needs to be temporary
+                        ballSpeed.Y /= 2f;
                     }
+                    else if (powerUps == paddleUp)
+                    {
+                        //Needs to be temporary
+                    }
+                    else if (powerUps == paddleDown)
+                    {
+                        //Needs to be temporary
+                    }
+                    powerUpRect.X = -200;
+                    powerUpRect.Y = -200;
+                }
+                if (clock == 1200)
+                {
 
+
+
+                    if (powerUps == speedUp)
+                    {
+                        ballSpeed.X /= 1.5f;//Needs to be temporary
+                        ballSpeed.Y /= 1.5f;
+                    }
+                    else if (powerUps == speedDown)
+                    {
+                        ballSpeed.X *= 2f;//Needs to be temporary
+                        ballSpeed.Y *= 2f;
+                    }
+                    else if (powerUps == paddleUp)
+                    {
+                        //Needs to be temporary
+                    }
+                    else if (powerUps == paddleDown)
+                    {
+                        //Needs to be temporary
+                    }
+                    clock = 0;
                 }
                 if (keyboardState.IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space))
                 {
@@ -371,7 +428,7 @@ namespace Final_Project
                     intersect = false;
 
 
-
+                    instanceballSound.Play();
 
                     intersect1 = true;
                     ballSpeed.X *= -1;
@@ -385,12 +442,14 @@ namespace Final_Project
                     intersect1 = false;
                     ballSpeed.X *= -1;
                     ballSpeed.Y += (blockSpeed.Y / 8);
+                    instanceballSound.Play();
                 }
 
 
                 //ballSpeed.X *= (3/2);
                 if (ballRect.Intersects(blockRect) || ballRect.Intersects(blockRect1))
                 {
+                    //ballSound.Play();
                     if (ballRect.Left > blockRect.Right)
                     {
                         if (ballRect.Intersects(blockRect))
