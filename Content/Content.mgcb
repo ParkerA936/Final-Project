@@ -25,12 +25,6 @@
 /processorParam:TextureFormat=Color
 /build:Ball (1).png
 
-#begin Ball Bounce.mp3
-/importer:Mp3Importer
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Ball Bounce.mp3
-
 #begin Blue vs Red.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -42,6 +36,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Blue vs Red.jpg
+
+#begin Boing.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Boing.wav
 
 #begin Circle_ (1).png
 /importer:TextureImporter
@@ -62,6 +62,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
+#begin IntroPong.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:IntroPong.mp3
+
+#begin Jeopardy.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Jeopardy.wav
+
 #begin Line (1).png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -73,18 +85,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Line (1).png
-
-#begin MarioPower.webp
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:MarioPower.webp
 
 #begin menu1.png
 /importer:TextureImporter
@@ -153,6 +153,12 @@
 /processorParam:TextureFormat=Color
 /build:pause1.png
 
+#begin Ping pong sound.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Ping pong sound.mp3
+
 #begin PongIntro.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -213,6 +219,12 @@
 /processorParam:TextureFormat=Color
 /build:three1.png
 
+#begin TopBounce.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:TopBounce.wav
+
 #begin Two.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -248,4 +260,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:White box (1).png
+
+#begin X:/My Drive/Downloads/MarioPower.webp
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:X:/My Drive/Downloads/MarioPower.webp;MarioPower.webp
 

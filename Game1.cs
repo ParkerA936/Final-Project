@@ -40,10 +40,10 @@ namespace Final_Project
         int time, clock = 0;
         int score = 0, score1 = 0, stopwatch = 0;
         int powerUps=0, powerUpLocation;
-        int speedUp = 1, speedDown = 2, paddleUp = 3, paddleDown = 4;
-        SoundEffect ballSound;
-        SoundEffectInstance instanceballSound;
-        
+        int speedUp = 1, speedDown = 2, paddleUp = 3, paddleDown = 4, powertime;
+        SoundEffect paddleBallSound, wallBallSound, jeopardySound;
+        SoundEffectInstance instancePaddleBallSound, instanceWallBallSound, instanceJeopardySound;
+        bool powerup;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -86,13 +86,14 @@ namespace Final_Project
 
             blockLocation = blockRect.Location.ToVector2();
             blockLocation1 = blockRect1.Location.ToVector2();
-            
+            powerup = false;
             time = 0;
             intersect1 = true;
             begin = true;
             timer = false;
             intersect = true;
             stopwatch1 = false;
+            powertime = 0;
             base.Initialize();
             gen = new Random();
 
@@ -117,11 +118,17 @@ namespace Final_Project
             speedUpTexture = Content.Load<Texture2D>("SpeedUp");
             powerUpTexture = Content.Load<Texture2D>("MarioPower");
 
+
             menuFont = Content.Load<SpriteFont>("menuFont");
             font = Content.Load<SpriteFont>("Font");
-            ballSound = Content.Load<SoundEffect>("Ball Bounce");
-            instanceballSound = ballSound.CreateInstance();
+            paddleBallSound = Content.Load<SoundEffect>("Boing");
+            instancePaddleBallSound = paddleBallSound.CreateInstance();
+            wallBallSound = Content.Load<SoundEffect>("TopBounce");
+             instanceWallBallSound = wallBallSound.CreateInstance();
+            jeopardySound = Content.Load<SoundEffect>("Jeopardy");
+            instanceJeopardySound = jeopardySound.CreateInstance();
             // TODO: use this.Content to load your game content here
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -208,31 +215,18 @@ namespace Final_Project
 
             else if (screen == Screen.Gameplay)
             {
+                instanceJeopardySound.Play();
                 clock += 1;
-                //PowerUps
                 
+
+
                 if (clock == 600)
                 {
-                    //int powerUps, powerUpLocation;
+
                     powerUps = gen.Next(1, 3); //chose what powerUp
-                    //int speedUp = 1, speedDown = 2, paddleUp = 3,paddleDown = 4;
+
                     powerUpLocation = gen.Next(1, 9);//chose location
-                    //if (powerUps == speedUp)
-                    //{
-                    //    ballSpeed.X = 6;//Needs to be temporary
-                    //}
-                    //else if (powerUps == speedDown)
-                    //{
-                    //    ballSpeed.X = 2;//Needs to be temporary
-                    //}
-                    //else if (powerUps == paddleUp)
-                    //{
-                    //    //Needs to be temporary
-                    //}
-                    //else if (powerUps == paddleDown)
-                    //{
-                    //    //Needs to be temporary
-                    //}
+
                     if (powerUpLocation == 1)
                     {
                         powerUpRect.X = 100;
@@ -269,7 +263,7 @@ namespace Final_Project
                         powerUpRect.Y = 477;
 
                     }
-                    else if(powerUpLocation == 7)
+                    else if (powerUpLocation == 7)
                     {
                         powerUpRect.X = 591;
                         powerUpRect.Y = 432;
@@ -297,18 +291,19 @@ namespace Final_Project
                         ballSpeed.X /= 2f;//Needs to be temporary
                         ballSpeed.Y /= 2f;
                     }
-                    else if (powerUps == paddleUp)
-                    {
-                        //Needs to be temporary
-                    }
-                    else if (powerUps == paddleDown)
-                    {
-                        //Needs to be temporary
-                    }
+                   
                     powerUpRect.X = -200;
                     powerUpRect.Y = -200;
+                    powerup = true;
+
+
                 }
-                if (clock == 1200)
+                if (powerup)
+                {
+                    powertime += 1;
+                }
+
+                if (powertime == 360 )
                 {
 
 
@@ -323,15 +318,9 @@ namespace Final_Project
                         ballSpeed.X *= 2f;//Needs to be temporary
                         ballSpeed.Y *= 2f;
                     }
-                    else if (powerUps == paddleUp)
-                    {
-                        //Needs to be temporary
-                    }
-                    else if (powerUps == paddleDown)
-                    {
-                        //Needs to be temporary
-                    }
+                    powertime = 0;
                     clock = 0;
+                    powerup = false;
                 }
                 if (keyboardState.IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space))
                 {
@@ -383,10 +372,10 @@ namespace Final_Project
                 if (keyboardState.IsKeyDown(Keys.Up))
                 {
                     blockSpeed1.Y += -5;
-                    if (blockRect.Top == 0)
-                    {
-                        blockSpeed1.Y = 0;
-                    }
+                    //if (blockRect.Top == 0)
+                    //{
+                    //    blockSpeed1.Y = 0;
+                    //}
                 }
 
                 if (keyboardState.IsKeyDown(Keys.Down))
@@ -428,7 +417,7 @@ namespace Final_Project
                     intersect = false;
 
 
-                    instanceballSound.Play();
+                    instancePaddleBallSound.Play();
 
                     intersect1 = true;
                     ballSpeed.X *= -1;
@@ -442,7 +431,7 @@ namespace Final_Project
                     intersect1 = false;
                     ballSpeed.X *= -1;
                     ballSpeed.Y += (blockSpeed.Y / 8);
-                    instanceballSound.Play();
+                    instancePaddleBallSound.Play();
                 }
 
 
@@ -467,7 +456,7 @@ namespace Final_Project
                         }
                     }
 
-
+                    instancePaddleBallSound.Play();
                 }
 
 
@@ -496,6 +485,7 @@ namespace Final_Project
                             ballLocation.Y = blockRect.Top - ballRect.Height;
                             UpdateRectangle();
                         }
+                       
                     }
 
                     // If ball hits paddle 2
@@ -512,8 +502,9 @@ namespace Final_Project
                             ballLocation.Y = blockRect1.Top - ballRect.Height;
                             UpdateRectangle();
                         }
+                        
                     }
-
+                    instancePaddleBallSound.Play();
 
                     //UpdateRectangle();
                     //intersect = true;
@@ -542,10 +533,13 @@ namespace Final_Project
                 if (ballRect.Top <= 0)
                 {
                     ballSpeed.Y *= -1;
+                    instanceWallBallSound.Play();
                 }
                 else if (ballRect.Bottom >= 600)
                 {
                     ballSpeed.Y *= -1;
+                    instanceWallBallSound.Play();
+
                 }
 
                 if (ballRect.Left >= 1000)
