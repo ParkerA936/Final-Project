@@ -17,7 +17,8 @@ namespace Final_Project
         Oneplay,
         Gameplay,
         Pause,
-        End
+        EndRed,
+        EndBlue
     }
     public class Game1 : Game
     {
@@ -28,8 +29,9 @@ namespace Final_Project
         Texture2D backTexture, blockTexture, circleTexture, lineTexture, ballTexture, introTexture;
         Texture2D  pauseTexture, oneTexture, twoTexture, threeTexture, menuTexture, rulesTexture;
         Texture2D speedUpTexture,speedDownTexture, paddleUpTexure, paddleDownTexture, powerUpTexture;
+        Texture2D redWin, blueWin, metalTexture;
         Rectangle window, blockRect, blockRect1, circleRect, lineRect, ballRect, twoPlayRect, quitRect;
-        Rectangle rulesRect, speedUpRect, speedDownRect, powerUpRect;
+        Rectangle rulesRect, speedUpRect, speedDownRect, powerUpRect, metalRect;
         Vector2 ballLocation, blockLocation, blockLocation1;
         SpriteFont font, menuFont;
         Vector2 ballSpeed, blockSpeed, blockSpeed1;
@@ -68,8 +70,8 @@ namespace Final_Project
             blockSpeed = new Vector2(0, 0);
             blockSpeed1 = new Vector2(0, 0);
 
-            twoPlayRect = new Rectangle(436, 366, 126, 29);
-            quitRect = new Rectangle(435, 404, 126, 29);
+            twoPlayRect = new Rectangle(430, 336, 136, 29);
+            quitRect = new Rectangle(430, 375, 136, 29);
 
             ballRect = new Rectangle(477, 276, 50, 50);
             ballLocation = ballRect.Location.ToVector2();
@@ -81,6 +83,7 @@ namespace Final_Project
             blockRect1 = new Rectangle(970, 225, 20, 150);
 
             rulesRect = new Rectangle(399,495,200,50);
+            metalRect = new Rectangle(400, 225, 200, 300);
             //blockCRect = new Rectangle(blockRect.X,blockRect.Y,0,150);
             //blockCRect1 = new Rectangle(blockRect.X, blockRect.Y, 0, 150);
 
@@ -108,7 +111,7 @@ namespace Final_Project
             blockTexture = Content.Load<Texture2D>("White box (1)");
             circleTexture = Content.Load<Texture2D>("Circle_ (1)");
             lineTexture = Content.Load<Texture2D>("Line (1)");
-            introTexture = Content.Load<Texture2D>("PongIntro");
+            introTexture = Content.Load<Texture2D>("IntroPong(3)");
             pauseTexture = Content.Load<Texture2D>("pause1");
             oneTexture = Content.Load<Texture2D>("one1");
             twoTexture = Content.Load<Texture2D>("two1"); 
@@ -117,7 +120,9 @@ namespace Final_Project
             rulesTexture = Content.Load<Texture2D>("Rules");
             speedUpTexture = Content.Load<Texture2D>("SpeedUp");
             powerUpTexture = Content.Load<Texture2D>("MarioPower");
-
+            redWin = Content.Load<Texture2D>("RedWin");
+            blueWin = Content.Load<Texture2D>("BlueWin");
+            metalTexture = Content.Load<Texture2D>("Gold_Medal");
 
             menuFont = Content.Load<SpriteFont>("menuFont");
             font = Content.Load<SpriteFont>("Font");
@@ -215,7 +220,24 @@ namespace Final_Project
 
             else if (screen == Screen.Gameplay)
             {
-                instanceJeopardySound.Play();
+                if (keyboardState.IsKeyDown(Keys.P))
+                {
+                    screen = Screen.EndBlue;
+                }
+                if (keyboardState.IsKeyDown(Keys.O))
+                {
+                    screen = Screen.EndRed;
+                }
+
+                if (score == 5)
+                {
+                    screen = Screen.EndRed;
+                }
+                else if (score1 == 5)
+                {
+                    screen = Screen.EndBlue;
+                }
+                    instanceJeopardySound.Play();
                 clock += 1;
                 
 
@@ -638,8 +660,20 @@ namespace Final_Project
                 _spriteBatch.DrawString(font, "" + score, new Vector2(340, 60), Color.Black);
                 _spriteBatch.DrawString(font, "" + score1, new Vector2(585, 60), Color.Black);
                 _spriteBatch.Draw(ballTexture, ballRect, Color.White);
+                
 
-
+            }
+            else if (screen == Screen.EndRed)
+            {
+                _spriteBatch.Draw(redWin, window, Color.White);
+                _spriteBatch.DrawString(font, "You Win", new Vector2(200, 80), Color.White);
+                _spriteBatch.Draw(metalTexture, metalRect, Color.White);
+            }
+            else if (screen == Screen.EndBlue)
+            {
+                _spriteBatch.Draw(blueWin, window, Color.White);
+                _spriteBatch.DrawString(font, "You Win", new Vector2(200, 80), Color.White);
+                _spriteBatch.Draw(metalTexture, metalRect, Color.White);
             }
             _spriteBatch.End();
             base.Draw(gameTime);

@@ -37,6 +37,18 @@
 /processorParam:TextureFormat=Color
 /build:Blue vs Red.jpg
 
+#begin BlueWin.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:BlueWin.png
+
 #begin Boing.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -62,11 +74,35 @@
 /processorParam:TextureFormat=Compressed
 /build:Font.spritefont
 
+#begin Gold_Medal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Gold_Medal.png
+
 #begin IntroPong.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:IntroPong.mp3
+
+#begin IntroPong(3).png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:IntroPong(3).png
 
 #begin Jeopardy.wav
 /importer:WavImporter
@@ -104,18 +140,6 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:menuFont.spritefont
-
-#begin One.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:One.jpg
 
 #begin one1.png
 /importer:TextureImporter
@@ -159,7 +183,7 @@
 /processorParam:Quality=Best
 /build:Ping pong sound.mp3
 
-#begin PongIntro.jpg
+#begin RedWin.jfif
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -169,7 +193,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:PongIntro.jpg
+/build:RedWin.jfif
 
 #begin Rules.png
 /importer:TextureImporter
@@ -195,18 +219,6 @@
 /processorParam:TextureFormat=Color
 /build:SpeedUp.png
 
-#begin Three.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Three.jpg
-
 #begin three1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -224,18 +236,6 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:TopBounce.wav
-
-#begin Two.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Two.jpg
 
 #begin two1.png
 /importer:TextureImporter
