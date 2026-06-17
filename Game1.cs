@@ -43,8 +43,8 @@ namespace Final_Project
         int score = 0, score1 = 0, stopwatch = 0;
         int powerUps=0, powerUpLocation;
         int speedUp = 1, speedDown = 2, paddleUp = 3, paddleDown = 4, powertime;
-        SoundEffect paddleBallSound, wallBallSound, jeopardySound;
-        SoundEffectInstance instancePaddleBallSound, instanceWallBallSound, instanceJeopardySound;
+        SoundEffect paddleBallSound, wallBallSound, jeopardySound, introSound, endSound;
+        SoundEffectInstance instancePaddleBallSound, instanceWallBallSound, instanceJeopardySound, introSoundInstance, endSoundInstance;
         bool powerup;
         public Game1()
         {
@@ -134,6 +134,12 @@ namespace Final_Project
             instanceJeopardySound = jeopardySound.CreateInstance();
             // TODO: use this.Content to load your game content here
 
+            introSound = Content.Load<SoundEffect>("Cantina Band");
+
+            endSound = Content.Load<SoundEffect>("Winning sound");
+
+            introSoundInstance = introSound.CreateInstance();
+            endSoundInstance = endSound.CreateInstance();
         }
 
         protected override void Update(GameTime gameTime)
@@ -150,10 +156,21 @@ namespace Final_Project
             this.Window.Title = mouseState.Position.ToString();
             if (screen == Screen.Intro)
             {
+                introSoundInstance.Play();
                 if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released && twoPlayRect.Contains(mouseState.Position))
                 {
                     screen = Screen.Gameplay;
-                    
+                    score = 0;
+                    score1 = 0;
+                    clock = 0;
+                    blockLocation.X = 10;
+                    blockLocation.Y = 225;
+                    blockLocation1.X = 970;
+                    blockLocation1.Y = 225;
+                    powerUpRect.X = -100;
+                    powerUpRect.Y = -100;
+                    introSoundInstance.Stop();
+
                 }
                 else if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released && rulesRect.Contains(mouseState.Position))
                 {
@@ -169,6 +186,26 @@ namespace Final_Project
                     screen = Screen.Rules;
                 }
                
+            }
+            else if (screen == Screen.EndBlue)
+            {
+                instanceJeopardySound.Stop();
+                endSoundInstance.Play();
+                if (keyboardState.IsKeyDown(Keys.I) && prevKeyState.IsKeyUp(Keys.I))
+                {
+                    screen = Screen.Intro;
+                    endSoundInstance.Stop();
+                }
+            }
+            else if (screen == Screen.EndRed)
+            {
+                instanceJeopardySound.Stop();
+                endSoundInstance.Play();
+                if (keyboardState.IsKeyDown(Keys.I) && prevKeyState.IsKeyUp(Keys.I))
+                {
+                    screen = Screen.Intro;
+                    endSoundInstance.Play();
+                }
             }
             else if (screen == Screen.Rules)
             {
@@ -220,24 +257,8 @@ namespace Final_Project
 
             else if (screen == Screen.Gameplay)
             {
-                if (keyboardState.IsKeyDown(Keys.P))
-                {
-                    screen = Screen.EndBlue;
-                }
-                if (keyboardState.IsKeyDown(Keys.O))
-                {
-                    screen = Screen.EndRed;
-                }
-
-                if (score == 5)
-                {
-                    screen = Screen.EndRed;
-                }
-                else if (score1 == 5)
-                {
-                    screen = Screen.EndBlue;
-                }
-                    instanceJeopardySound.Play();
+                
+                instanceJeopardySound.Play();
                 clock += 1;
                 
 
@@ -591,6 +612,25 @@ namespace Final_Project
                     timer = false;
                     time = 0;
                 }
+                //if (keyboardState.IsKeyDown(Keys.P))
+                //{
+                //    screen = Screen.EndBlue;
+                //}
+                //if (keyboardState.IsKeyDown(Keys.O))
+                //{
+                //    screen = Screen.EndRed;
+                //}
+
+                if (score == 5)
+                {
+                    screen = Screen.EndRed;
+                    instanceJeopardySound.Stop();
+                }
+                else if (score1 == 5)
+                {
+                    screen = Screen.EndBlue;
+                    instanceJeopardySound.Stop();
+                }
 
             }
             
@@ -668,12 +708,14 @@ namespace Final_Project
                 _spriteBatch.Draw(redWin, window, Color.White);
                 _spriteBatch.DrawString(font, "You Win", new Vector2(200, 80), Color.White);
                 _spriteBatch.Draw(metalTexture, metalRect, Color.White);
+                _spriteBatch.DrawString(menuFont, "!Press I to go back to main menu! ", new Vector2(270, 530), Color.White);
             }
             else if (screen == Screen.EndBlue)
             {
                 _spriteBatch.Draw(blueWin, window, Color.White);
                 _spriteBatch.DrawString(font, "You Win", new Vector2(200, 80), Color.White);
                 _spriteBatch.Draw(metalTexture, metalRect, Color.White);
+                _spriteBatch.DrawString(menuFont, "!Press I to go back to main menu! ", new Vector2(270, 530), Color.White);
             }
             _spriteBatch.End();
             base.Draw(gameTime);

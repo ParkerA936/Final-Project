@@ -55,6 +55,12 @@
 /processorParam:Quality=Best
 /build:Boing.wav
 
+#begin Cantina Band.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Cantina Band.mp3
+
 #begin Circle_ (1).png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -260,6 +266,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:White box (1).png
+
+#begin Winning sound.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Winning sound.mp3
 
 #begin X:/My Drive/Downloads/MarioPower.webp
 /importer:TextureImporter
