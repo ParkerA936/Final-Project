@@ -204,11 +204,12 @@ namespace Final_Project
                 if (keyboardState.IsKeyDown(Keys.I) && prevKeyState.IsKeyUp(Keys.I))
                 {
                     screen = Screen.Intro;
-                    endSoundInstance.Play();
+                    endSoundInstance.Stop();
                 }
             }
             else if (screen == Screen.Rules)
             {
+                introSoundInstance.Play();
                 if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M))
                 {
                     screen = Screen.Intro;
@@ -217,6 +218,8 @@ namespace Final_Project
             }
             else if (screen == Screen.Menu)
             {
+                instanceJeopardySound.Stop();
+                introSoundInstance.Play();
                 if (keyboardState.IsKeyDown(Keys.M) && prevKeyState.IsKeyUp(Keys.M))
                 {
                     screen = Screen.Pause;
@@ -230,6 +233,8 @@ namespace Final_Project
             else if (screen == Screen.Pause)
 
             {
+                instanceJeopardySound.Stop();
+                introSoundInstance.Play();
                 if (keyboardState.IsKeyDown(Keys.Space) && prevKeyState.IsKeyUp(Keys.Space))
                 {
                     stopwatch1 = true;
@@ -242,6 +247,8 @@ namespace Final_Project
 
                 if (stopwatch >= 240)
                 {
+                    instanceJeopardySound.Play();
+                    introSoundInstance.Stop();
                     screen = Screen.Gameplay;
                     stopwatch = 0;
                     stopwatch1 = false;
@@ -419,22 +426,26 @@ namespace Final_Project
                     //{
                     //    blockSpeed1.Y = 0;
                     //}
+                   
                 }
 
                 if (keyboardState.IsKeyDown(Keys.Down))
                 {
                     blockSpeed1.Y += 5;
+                    
                 }
 
 
                 if (keyboardState.IsKeyDown(Keys.W))
                 {
                     blockSpeed.Y += -5;
+                    
                 }
 
                 if (keyboardState.IsKeyDown(Keys.S))
                 {
                     blockSpeed.Y += 5;
+                   
                 }
 
                 blockLocation.Y += blockSpeed.Y;
@@ -482,7 +493,7 @@ namespace Final_Project
                 if (ballRect.Intersects(blockRect) || ballRect.Intersects(blockRect1))
                 {
                     //ballSound.Play();
-                    if (ballRect.Left > blockRect.Right)
+                    if (ballRect.Left < blockRect.Right)
                     {
                         if (ballRect.Intersects(blockRect))
                         {
